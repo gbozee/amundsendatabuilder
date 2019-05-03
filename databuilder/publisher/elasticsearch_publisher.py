@@ -132,7 +132,10 @@ class ElasticsearchPublisher(Publisher):
         :return: list of elasticsearch indices
         """
         try:
-            indices = self.elasticsearch_client.indices.get_alias(self.elasticsearch_alias).keys()
+            indices_container = self.elasticsearch_client.indices
+            alias = indices_container.get_alias(self.elasticsearch_alias)
+            indices = alias.keys()
+            # indices = self.elasticsearch_client.indices.get_alias(self.elasticsearch_alias).keys()
             return indices
         except NotFoundError:
             LOGGER.warn("Received index not found error from Elasticsearch", exc_info=True)
